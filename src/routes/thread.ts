@@ -13,7 +13,7 @@ const router = Router();
 router.get('/', ThreadController.redirectToSingleTopic);
 router.get('/threadId/:_id', ThreadController.getOne);
 router.get('/topicId/:_id', ThreadController.getByTopicId);
-router.get('/create', passportConfig.isAuthenticated, ThreadController.create);
-router.post('/create', passportConfig.isAuthenticated, ThreadController.postCreate);
+router.get('/topicId/:topicId/create', passportConfig.isAuthenticated, ThreadController.create);
+router.post('/topicId/:topicId/create', passportConfig.isAuthenticated, ThreadController.postCreate);
 
 export default router;

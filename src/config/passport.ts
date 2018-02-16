@@ -126,6 +126,7 @@ export let isAuthenticated = (req: Request, res: Response, next: NextFunction) =
   if (req.isAuthenticated()) {
     return next();
   }
+  req.flash("errors", { msg: "Authentication Error: You must be signed in first." });
   res.redirect("/user/login");
 };
 

@@ -26,15 +26,19 @@ block content
 
           li.page-item(class=(topic.page == pages[pages.length - 1]) ? "disabled not-allowed" : "pointer")
             a.page-link(href=`${topic._id}?page=${parseInt(topic.page) + 1}`) >>
-        a.px-3(href='/thread/create')
-          button.btn.btn-outline-primary.pointer Create New Thread
+        a.px-3(href=`/thread/topicId/${topic._id}/create`)
+          button.btn.btn-primary.pointer Create New Thread
       //- end paginate buttons
 
       if threads
         each thread in threads
-          a.link-text(href=`/thread/threadId/${thread._id}`)
-            div.card.my-3.border-gold
+          div.card.my-3.border-gold
+            a.link-text(href=`/thread/threadId/${thread._id}`)
               div.card-header
                 h5= thread.title
-              div.card-content
+            div.card-content
+              a.link-text(href=`/thread/threadId/${thread._id}`)
                 p= thread.summary
+              if user._id.toString() == thread.creatorId.toString()
+                button.btn.btn-outline-secondary.pointer.m-2 Edit
+                button.btn.btn-outline-danger.pointer.m-2 Delete

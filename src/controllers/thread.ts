@@ -4,16 +4,19 @@ import Thread from "../models/Thread";
 import Topic from "../models/Topic";
 import { range } from "lodash";
 
-// function _seeder() {
-  // const counter = [...Array(15).keys()];
-  // for (const idx of counter) {
-  //   const doc = await Thread.create({
-  //     topicId,
-  //     creatorId,
-  //     title: faker.lorem.text(),
-  //     summary: faker.lorem.paragraph()
-  //   });
-  // }
+// async function seeder() {
+//   const creatorId = "5a865606fa7ee315680f6a8f";
+//   const topicId = "5a848fbf9078812020bffdda";
+
+//   const counter = [...Array(15).keys()];
+//   for (const idx of counter) {
+//     const doc = await Thread.create({
+//       topicId,
+//       creatorId,
+//       title: faker.lorem.word(),
+//       summary: faker.lorem.paragraph()
+//     });
+//   }
 // }
 
 export let redirectToSingleTopic = async (req: Request, res: Response) => {
@@ -80,9 +83,9 @@ export let create = (req: Request, res: Response) => {
 };
 
 export let postCreate = async (req: Request, res: Response, next: NextFunction) => {
-  // console.log(req.user);
-  console.log(req.body);
+  const { topicId } = req.params;
   req.body.creatorId = req.user._id;
+  req.body.topicId = topicId;
   req.assert("title", "Title cannot be blank").notEmpty();
   req.assert("summary", "Summary cannot be blank").notEmpty();
   req.assert("topicId", "topicId cannot be blank").notEmpty();
@@ -90,7 +93,7 @@ export let postCreate = async (req: Request, res: Response, next: NextFunction) 
   const errors = req.validationErrors();
   if (errors) {
     req.flash("errors", errors);
-    return res.redirect("/thread/create");
+    return res.redirect(`/thread/topicId/${topicId}/create`);
   }
 
   try {

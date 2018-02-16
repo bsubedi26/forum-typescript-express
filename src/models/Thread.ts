@@ -1,12 +1,5 @@
 import * as mongoose from "mongoose";
 
-// t.increments('id').primary();
-// t.string('title').notNullable();
-// t.string('summary').notNullable();
-
-// t.integer('topic_id').unsigned().references('id').inTable('topics');
-// t.integer('creator_id').unsigned().references('id').inTable('users').onDelete('cascade');
-
 const threadSchema = new mongoose.Schema({
   title: { type: String, required: true },
   summary: { type: String, required: true },
