@@ -3,13 +3,19 @@
 // @import "lib/font-awesome/font-awesome";
 // @import "themes/default/default";
 
+
 @import "lib/bootstrap4/bootstrap";
+@import "base/button-social";
 @import "lib/font-awesome/font-awesome";
 
 // Scaffolding
 // -------------------------
 .border-gold {
   border: 1px goldenrod solid;
+}
+
+.not-allowed {
+  cursor: not-allowed;
 }
 
 .link-text {

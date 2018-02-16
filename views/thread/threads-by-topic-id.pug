@@ -3,13 +3,13 @@ extends ../layout
 block content
   div.row.mx-auto.text-center
     div.col-12
-      h5.display-5.my-3 Current Topic: #{topic}
+      h5.display-5.my-3 Current Topic: #{topic.name}
 
     div.col-12
       if topics
         each t in topics
-          a(href='/thread/topicId/'+t._id)
-            if topic == t.name
+          a(href=`/thread/topicId/${t._id}`)
+            if topic.name == t.name
               button.btn.btn-info.mx-2= t.name
             else
               button.btn.btn-outline-info.mx-2= t.name
@@ -17,21 +17,22 @@ block content
       //- paginate buttons
       div.d-flex.justify-content-center.mt-4
         ul.pagination
-          li.page-item.disabled(style={'cursor': 'not-allowed'}) 
-            a.page-link <<
+          li.page-item(class=(topic.page == 1) ? "disabled not-allowed" : "pointer")
+            a.page-link(href=`${topic._id}?page=${topic.page - 1}`) <<
+          
+          each val in (pages)
+            li.page-item.pointer(class=(val == topic.page) ? "active" : undefined)
+              a.page-link(href=`${topic._id}?page=${val}`)= val
 
-          each val in [1,2,3,4,5]
-            li.page-item.pointer
-              a.page-link= val
-
-          li.page-item.disabled(style={'cursor': 'not-allowed'}) 
-            a.page-link >>
+          li.page-item(class=(topic.page == pages[pages.length - 1]) ? "disabled not-allowed" : "pointer")
+            a.page-link(href=`${topic._id}?page=${parseInt(topic.page) + 1}`) >>
         a.px-3(href='/thread/create')
           button.btn.btn-outline-primary.pointer Create New Thread
+      //- end paginate buttons
 
       if threads
         each thread in threads
-          a.link-text(href="/thread/threadId/"+ thread._id)
+          a.link-text(href=`/thread/threadId/${thread._id}`)
             div.card.my-3.border-gold
               div.card-header
                 h5= thread.title

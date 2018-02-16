@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import * as ThreadController from "../controllers/thread";
+import * as passportConfig from "../config/passport";
 
 // app.get("/thread", threadController.redirectToSingleTopic);
 // app.get("/thread/threadId/:id", threadController.getOne);
@@ -12,7 +13,7 @@ const router = Router();
 router.get('/', ThreadController.redirectToSingleTopic);
 router.get('/threadId/:_id', ThreadController.getOne);
 router.get('/topicId/:_id', ThreadController.getByTopicId);
-router.get('/create', ThreadController.create);
-router.post('/create', ThreadController.postCreate);
+router.get('/create', passportConfig.isAuthenticated, ThreadController.create);
+router.post('/create', passportConfig.isAuthenticated, ThreadController.postCreate);
 
 export default router;
