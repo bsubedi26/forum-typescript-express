@@ -8,7 +8,7 @@ block content
     div.col-12
       if topics
         each topic in topics
-          a(href='/thread/topicId/'+topic._id)
+          a(href=`thread/'${topic._id}`)
             button.btn.btn-outline-info.mx-2= topic.name
 
       //- //- paginate buttons

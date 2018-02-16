@@ -10,10 +10,10 @@ import * as passportConfig from "../config/passport";
 
 const router = Router();
 
-router.get('/', ThreadController.redirectToSingleTopic);
-router.get('/threadId/:_id', ThreadController.getOne);
-router.get('/topicId/:_id', ThreadController.getByTopicId);
-router.get('/topicId/:topicId/create', passportConfig.isAuthenticated, ThreadController.create);
-router.post('/topicId/:topicId/create', passportConfig.isAuthenticated, ThreadController.postCreate);
+router.get('/', ThreadController.get);
+router.get('/:_id', ThreadController.getOne);
+router.get('/:topicId', ThreadController.getByTopicId);
+router.get('/:topicId/create', passportConfig.isAuthenticated, ThreadController.create);
+router.post('/:topicId/create', passportConfig.isAuthenticated, ThreadController.postCreate);
 
 export default router;

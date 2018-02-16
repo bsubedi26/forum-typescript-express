@@ -8,7 +8,7 @@ block content
     div.col-12
       if topics
         each t in topics
-          a(href=`/thread/topicId/${t._id}`)
+          a(href=`/thread?topicId=${t._id}`)
             if topic.name == t.name
               button.btn.btn-info.mx-2= t.name
             else
@@ -18,27 +18,30 @@ block content
       div.d-flex.justify-content-center.mt-4
         ul.pagination
           li.page-item(class=(topic.page == 1) ? "disabled not-allowed" : "pointer")
-            a.page-link(href=`${topic._id}?page=${topic.page - 1}`) <<
+            a.page-link(href=`/thread?topicId=${topic._id}&page=${topic.page - 1}`) <<
           
           each val in (pages)
             li.page-item.pointer(class=(val == topic.page) ? "active" : undefined)
-              a.page-link(href=`${topic._id}?page=${val}`)= val
+              a.page-link(href=`/thread?topicId=${topic._id}&page=${val}`)= val
 
           li.page-item(class=(topic.page == pages[pages.length - 1]) ? "disabled not-allowed" : "pointer")
-            a.page-link(href=`${topic._id}?page=${parseInt(topic.page) + 1}`) >>
-        a.px-3(href=`/thread/topicId/${topic._id}/create`)
+            a.page-link(href=`/thread?topicId=${topic._id}&page=${parseInt(topic.page) + 1}`) >>
+        a.px-3(href=`/thread/${topic._id}/create`)
           button.btn.btn-primary.pointer Create New Thread
       //- end paginate buttons
 
       if threads
         each thread in threads
           div.card.my-3.border-gold
-            a.link-text(href=`/thread/threadId/${thread._id}`)
+            a.link-text(href=`/thread/${thread._id}`)
               div.card-header
                 h5= thread.title
+                span Creator: 
+                span= thread.creatorId.email
             div.card-content
-              a.link-text(href=`/thread/threadId/${thread._id}`)
+              a.link-text(href=`/thread/${thread._id}`)
                 p= thread.summary
-              if user._id.toString() == thread.creatorId.toString()
-                button.btn.btn-outline-secondary.pointer.m-2 Edit
-                button.btn.btn-outline-danger.pointer.m-2 Delete
+              if user
+                if user._id.toString() == thread.creatorId._id.toString()
+                  button.btn.btn-outline-secondary.pointer.m-2 Edit
+                  button.btn.btn-outline-danger.pointer.m-2 Delete

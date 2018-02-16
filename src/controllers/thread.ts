@@ -2,7 +2,7 @@ import { Response, Request, NextFunction } from "express";
 import * as faker from "faker";
 import Thread from "../models/Thread";
 import Topic from "../models/Topic";
-import { range } from "lodash";
+import { range, isEmpty } from "lodash";
 
 // async function seeder() {
 //   const creatorId = "5a865606fa7ee315680f6a8f";
@@ -19,24 +19,32 @@ import { range } from "lodash";
 //   }
 // }
 
+export let get = async (req: Request, res: Response) => {
+  console.log('req.query: ', req.query);
+  if (isEmpty(req.query)) return redirectToSingleTopic(req, res);
+  req.query._id ? getOne(req, res) : getByTopicId(req, res);
+};
+
 export let redirectToSingleTopic = async (req: Request, res: Response) => {
   const singleTopic: any = await Topic.findOne();
-  res.redirect(`/thread/topicId/${singleTopic._id}`);
+  return res.redirect(`/thread?topicId=${singleTopic._id}`);
 };
 
 export let getByTopicId = async (req: Request, res: Response) => {
   const currentPage = parseInt(req.query.page, 10);
-  const topicId = req.params._id;
+  const topicId = req.query.topicId ? req.query.topicId : req.params._id;
   const itemPerPage = 5;
 
   const count = await Thread.find({ topicId }).count();
+  const all: any = await Thread.find({ topicId });
   const threads: any = await Thread.find({ topicId })
     .skip(itemPerPage * currentPage)
     .limit(itemPerPage)
     .sort({ updatedAt: -1 })
-    .populate({ path: 'topicId', select: 'name' });
+    .populate({ path: 'topicId', select: 'name' })
+    .populate({ path: 'creatorId', select: 'email' });
 
-
+  console.log(threads[0]);
   const topic = {
     name: threads[0].topicId.name,
     _id: topicId,
@@ -57,9 +65,8 @@ export let getByTopicId = async (req: Request, res: Response) => {
 };
 
 export let getOne = async (req: Request, res: Response) => {
-  const { _id } = req.params;
+  const _id = req.query._id ? req.query._id : req.params._id;
   const thread = await Thread.findById(_id);
-
   res.render("thread/thread-by-thread-id", {
     title: "Thread Single ID",
     thread
@@ -93,7 +100,7 @@ export let postCreate = async (req: Request, res: Response, next: NextFunction) 
   const errors = req.validationErrors();
   if (errors) {
     req.flash("errors", errors);
-    return res.redirect(`/thread/topicId/${topicId}/create`);
+    return res.redirect(`/thread/${topicId}/create`);
   }
 
   try {

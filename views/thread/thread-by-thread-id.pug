@@ -8,6 +8,6 @@ block content
           h5= thread.title
         div.card-content
           p= thread.summary
-          if user._id.toString() == thread.creatorId.toString()
+          if user._id.toString() == thread.creatorId._id.toString()
             button.btn.btn-outline-secondary.pointer.m-2 Edit
             button.btn.btn-outline-danger.pointer.m-2 Delete
