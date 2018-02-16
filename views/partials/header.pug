@@ -1,0 +1,37 @@
+nav.navbar.navbar-expand-lg.navbar-light.bg-light
+  a.navbar-brand(href='/')
+    i.fa.fa-cube
+    | LiveForums
+  button.navbar-toggler(type="button", data-toggle="collapse" data-target="#navbarSupportedContent")
+    span.navbar-toggler-icon
+
+  div.collapse.navbar-collapse#navbarSupportedContent
+    ul.navbar-nav.mr-auto
+      li.mx-1.nav-item(class=(title == 'Home') ? 'active' : undefined)
+        a.nav-link(href='/') Home
+      li.mx-1.nav-item(class=(title == 'API Examples') ? 'active' : undefined)
+        a.nav-link(href='/api') API Examples
+      li.mx-1.nav-item(class=(title == 'Contact') ? 'active' : undefined)
+        a.nav-link(href='/contact') Contact
+      li.mx-1.nav-item(class=(title.includes('Thread')) ? 'active' : undefined)
+        a.nav-link(href='/thread') Threads
+
+    ul.navbar-nav.ml-auto
+      if !user
+        li.nav-item(class=(title == 'Login') ? 'active' : undefined)
+          a.nav-link(href='/user/login') Login
+        li.nav-item(class=(title == 'Create Account') ? 'active' : undefined)
+          a.nav-link(href='/user/signup') Create Account
+      else
+        li.nav-item.dropdown(class=(title == 'Account Management') ? '' : undefined)
+          a.nav-link.dropdown-toggle(href='#', data-toggle='dropdown')
+            if user.profile.picture
+              img(src=user.profile.picture, alt=(user.profile.name || user.email || user.id))
+            else
+              img(src=user.gravatar(60), alt=(user.profile.name || user.email || user.id))
+            span= user.profile.name || user.email || user.id
+            i.caret
+          div.dropdown-menu
+            a.dropdown-item(href='/account') My Account
+            div.dropdown-divider
+            a.dropdown-item(href='/user/logout') Logout

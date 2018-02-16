@@ -1,0 +1,21 @@
+extends ../layout
+
+block content
+  .page-header
+    h3= title
+
+  form.form-horizontal(method='POST')
+    input(type='hidden', name='_csrf', value=_csrf)
+    .form-group
+      label(class='col-sm-2 control-label', for='title') Title
+      .col-sm-8
+        input.form-control(type='text', name='title', id='title', autofocus=true)
+    .form-group
+      label(class='col-sm-2 control-label', for='summary') Summary
+      .col-sm-8
+        textarea.form-control(name='summary', id='summary', rows='7')
+    .form-group
+      .col-sm-offset-2.col-sm-8
+        button.btn.btn-outline-primary.w-25(type='submit')
+          i.fa.fa-envelope
+          | Submit

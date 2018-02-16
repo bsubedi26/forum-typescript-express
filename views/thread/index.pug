@@ -1,0 +1,36 @@
+extends ../layout
+
+block content
+  div.row.mx-auto.text-center
+    div.col-12
+      h5.display-5.my-3 Select Topic
+  
+    div.col-12
+      if topics
+        each topic in topics
+          a(href='/thread/topicId/'+topic._id)
+            button.btn.btn-outline-info.mx-2= topic.name
+
+      //- //- paginate buttons
+      //- div.d-flex.justify-content-center.mt-4
+      //-   ul.pagination
+      //-     li.page-item.disabled(style={'cursor': 'not-allowed'}) 
+      //-       a.page-link <<
+
+      //-     each val in [1,2,3,4,5]
+      //-       li.page-item.pointer
+      //-         a.page-link= val
+
+      //-     li.page-item.disabled(style={'cursor': 'not-allowed'}) 
+      //-       a.page-link >>
+      //-   a.px-3(href='/thread/create')
+      //-     button.btn.btn-outline-primary.pointer Create New Thread
+
+      //- if threads
+      //-   each thread in threads
+      //-     a.link-text(href="/thread/threadId/"+ thread._id)
+      //-       div.card.my-3.border-gold
+      //-         div.card-header
+      //-           h5= thread.title
+      //-         div.card-content
+      //-           p= thread.summary
