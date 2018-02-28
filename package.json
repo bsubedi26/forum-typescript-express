@@ -10,6 +10,7 @@
   "license": "MIT",
   "scripts": {
     "start": "npm run serve",
+    "postinstall": "npm run build",
     "build": "npm run build-sass && npm run build-ts && npm run tslint && npm run copy-static-assets",
     "serve": "node dist/server.js",
     "watch-node": "nodemon dist/server.js",
@@ -49,9 +50,7 @@
     "passport-facebook": "^2.1.1",
     "passport-local": "^1.0.0",
     "pug": "^2.0.0-rc.4",
-    "request": "^2.83.0"
-  },
-  "devDependencies": {
+    "request": "^2.83.0",
     "@types/async": "^2.0.45",
     "@types/bcrypt-nodejs": "0.0.30",
     "@types/bluebird": "^3.5.18",
