@@ -1,6 +1,7 @@
 import * as bcrypt from "bcrypt-nodejs";
 import * as crypto from "crypto";
 import * as mongoose from "mongoose";
+import Thread from "./Thread";
 
 export type UserModel = mongoose.Document & {
   email: string,
@@ -47,6 +48,15 @@ const userSchema = new mongoose.Schema({
     picture: String
   }
 }, { timestamps: true });
+
+/**
+ * Remove all threads associated with the deleted user.
+ * Similar to SQLs on delete cascade.
+ */
+userSchema.pre("remove", async function remove(next) {
+  await Thread.remove({ creatorId: this._id });
+  next();
+});
 
 /**
  * Password hash middleware.

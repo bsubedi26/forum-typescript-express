@@ -1,23 +1,9 @@
 import { Response, Request, NextFunction } from "express";
-import * as faker from "faker";
 import Thread from "../models/Thread";
 import Topic from "../models/Topic";
 import { range, isEmpty } from "lodash";
+import { handleIfNoThreads } from "./helpers";
 
-// async function seeder() {
-//   const creatorId = "5a865606fa7ee315680f6a8f";
-//   const topicId = "5a848fbf9078812020bffdda";
-
-//   const counter = [...Array(15).keys()];
-//   for (const idx of counter) {
-//     const doc = await Thread.create({
-//       topicId,
-//       creatorId,
-//       title: faker.lorem.word(),
-//       summary: faker.lorem.paragraph()
-//     });
-//   }
-// }
 
 export let get = async (req: Request, res: Response) => {
   // console.log('req.query: ', req.query);
@@ -36,6 +22,8 @@ export let getByTopicId = async (req: Request, res: Response) => {
   const itemPerPage = 5;
 
   const count = await Thread.find({ topicId }).count();
+  if (count === 0) return handleIfNoThreads(count, topicId, req, res);
+
   const all: any = await Thread.find({ topicId });
   const threads: any = await Thread.find({ topicId })
     .skip(itemPerPage * currentPage)
@@ -44,8 +32,10 @@ export let getByTopicId = async (req: Request, res: Response) => {
     .populate({ path: 'topicId', select: 'name' })
     .populate({ path: 'creatorId', select: 'email' });
 
+
+  const name = threads[0] ? threads[0].topicId.name : 'JavaScript';
   const topic = {
-    name: threads[0].topicId.name,
+    name,
     _id: topicId,
     page: req.query.page || 1,
     count

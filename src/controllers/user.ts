@@ -195,13 +195,17 @@ export let postUpdatePassword = (req: Request, res: Response, next: NextFunction
  * POST /account/delete
  * Delete user account.
  */
-export let postDeleteAccount = (req: Request, res: Response, next: NextFunction) => {
-  User.remove({ _id: req.user.id }, (err) => {
-    if (err) { return next(err); }
+export let postDeleteAccount = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const user = await User.findById(req.user.id);
+    const doc = await user.remove();
     req.logout();
     req.flash("info", { msg: "Your account has been deleted." });
     res.redirect("/");
-  });
+  }
+  catch (error) {
+    return next(error);
+  }
 };
 
 /**
