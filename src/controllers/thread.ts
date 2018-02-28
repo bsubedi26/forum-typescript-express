@@ -22,7 +22,7 @@ export let getByTopicId = async (req: Request, res: Response) => {
   const itemPerPage = 5;
 
   const count = await Thread.find({ topicId }).count();
-  if (count === 0) return handleIfNoThreads(count, topicId, req, res);
+  if (count === 0) return handleIfNoThreads(topicId, req, res);
 
   const all: any = await Thread.find({ topicId });
   const threads: any = await Thread.find({ topicId })
@@ -98,7 +98,7 @@ export let postCreate = async (req: Request, res: Response, next: NextFunction) 
     req.flash("success", {
       msg: "Successfully created thread!"
     });
-    return res.redirect("/thread");
+    return res.redirect(`/thread?topicId=${topicId}`);
   }
   catch (err) {
     next(err);
@@ -108,12 +108,16 @@ export let postCreate = async (req: Request, res: Response, next: NextFunction) 
 
 export let remove = async (req: Request, res: Response, next: NextFunction) => {
   const { _id } = req.params;
+  const referer = req.header('Referer');
+  const origin = req.header('origin');
+  const redirectUrl = referer.substring(origin.length);
+
   try {
     const doc = await Thread.findByIdAndRemove(_id);
     req.flash("success", {
       msg: "Successfully removed thread!"
     });
-    return res.redirect("/thread");
+    return res.redirect(redirectUrl);
   }
   catch (err) {
     next(err);
@@ -122,13 +126,16 @@ export let remove = async (req: Request, res: Response, next: NextFunction) => {
 
 export let edit = async (req: Request, res: Response, next: NextFunction) => {
   const { _id } = req.params;
+  const referer = req.header('Referer');
+  const origin = req.header('origin');
+  const redirectUrl = referer.substring(origin.length);
 
   try {
     const doc = await Thread.findByIdAndUpdate(_id, req.body);
     req.flash("success", {
       msg: "Successfully updated thread!"
     });
-    return res.redirect("/thread");
+    return res.redirect(redirectUrl);
   }
   catch (err) {
     next(err);

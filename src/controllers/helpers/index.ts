@@ -1,6 +1,6 @@
 import * as faker from "faker";
 
-const handleIfNoThreads = (count, topicId, req, res) => {
+const handleIfNoThreads = (topicId, req, res) => {
   if (req.isAuthenticated()) {
     req.flash("success", { msg: "Please create a thread. There are currently no threads in the mongo database." });
     return res.redirect(`/thread/${topicId}/create`);

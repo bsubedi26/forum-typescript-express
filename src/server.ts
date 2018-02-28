@@ -1,12 +1,16 @@
-import * as dotenv from "dotenv";
-dotenv.config({ path: ".env.development" });
 import * as errorHandler from "errorhandler";
+import * as dotenv from "dotenv";
+/**
+ * Configure dev environments before importing app
+ * to allow applicatin to access .env variables
+ */
+(process.env.NODE_ENV !== "production" && dotenv.config({ path: ".env.development" }));
 import app from "./app";
 
 /**
  * errorHandler - remove for production
  */
-app.use(errorHandler());
+(process.env.NODE_ENV !== "production" && app.use(errorHandler()));
 
 /**
  * catch app process unhandled rejections
