@@ -294,7 +294,7 @@ export let postReset = (req: Request, res: Response, next: NextFunction) => {
           pass: process.env.SENDGRID_PASSWORD
         }
       });
-      const mailOptions = {
+      const mailOptions: any = {
         to: user.email,
         from: "express-ts@starter.com",
         subject: "Your password has been changed",
@@ -368,7 +368,7 @@ export let postForgot = (req: Request, res: Response, next: NextFunction) => {
           pass: process.env.SENDGRID_PASSWORD
         }
       });
-      const mailOptions = {
+      const mailOptions: any = {
         to: user.email,
         from: "hackathon@starter.com",
         subject: "Reset your password on Hackathon Starter",

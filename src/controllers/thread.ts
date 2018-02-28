@@ -2,7 +2,7 @@ import { Response, Request, NextFunction } from "express";
 import Thread from "../models/Thread";
 import Topic from "../models/Topic";
 import { range, isEmpty } from "lodash";
-import { handleIfNoThreads } from "./helpers";
+import { handleIfNoThreads, redirectToPrevious } from "./helpers";
 
 
 export let get = async (req: Request, res: Response) => {
@@ -55,7 +55,7 @@ export let getByTopicId = async (req: Request, res: Response) => {
 
 export let getOne = async (req: Request, res: Response) => {
   const _id = req.query._id ? req.query._id : req.params._id;
-  const thread = await Thread.findById(_id);
+  const thread = await Thread.findById(_id).populate({ path: 'creatorId', select: 'email' });
   res.render("thread/thread-by-thread-id", {
     title: "Thread Single ID",
     thread
@@ -108,16 +108,13 @@ export let postCreate = async (req: Request, res: Response, next: NextFunction) 
 
 export let remove = async (req: Request, res: Response, next: NextFunction) => {
   const { _id } = req.params;
-  const referer = req.header('Referer');
-  const origin = req.header('origin');
-  const redirectUrl = referer.substring(origin.length);
 
   try {
     const doc = await Thread.findByIdAndRemove(_id);
     req.flash("success", {
       msg: "Successfully removed thread!"
     });
-    return res.redirect(redirectUrl);
+    return redirectToPrevious(req, res);
   }
   catch (err) {
     next(err);
@@ -126,16 +123,14 @@ export let remove = async (req: Request, res: Response, next: NextFunction) => {
 
 export let edit = async (req: Request, res: Response, next: NextFunction) => {
   const { _id } = req.params;
-  const referer = req.header('Referer');
-  const origin = req.header('origin');
-  const redirectUrl = referer.substring(origin.length);
 
   try {
     const doc = await Thread.findByIdAndUpdate(_id, req.body);
     req.flash("success", {
       msg: "Successfully updated thread!"
     });
-    return res.redirect(redirectUrl);
+    return redirectToPrevious(req, res);
+
   }
   catch (err) {
     next(err);

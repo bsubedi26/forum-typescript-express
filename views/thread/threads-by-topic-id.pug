@@ -2,8 +2,23 @@ extends ../layout
 
 block content
   div.row.mx-auto.text-center
-    div.col-12
-      h5.display-5.my-3 Current Topic: #{topic.name}
+    div.row.justify-content-center.align-items-center.w-100.mb-3
+      h5.display-5 Current Topic: #{topic.name}
+      button.btn.btn-purple.pointer.mx-2(data-toggle="collapse" data-target="#newTopic") Create New Topic
+
+      div.collapse.navbar-collapse#newTopic
+        div.mt-3.mx-auto.w-50
+          form(action=`/topic` method='POST')
+            input(type='hidden', name='_csrf', value=_csrf)
+            .form-group
+              label(class='control-label', for='name') Topic Name
+              input.form-control(type='text', name='name', id='name', autofocus=true)
+            .form-group
+              button.btn.btn-success(type='submit')
+                i.fa.fa-envelope
+                | Submit
+
+      
 
     div.col-12
       if topics
@@ -63,4 +78,3 @@ block content
                             button.btn.btn-outline-success(type='submit')
                               i.fa.fa-envelope
                               | Submit
-

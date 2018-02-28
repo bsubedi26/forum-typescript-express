@@ -4,8 +4,8 @@ import * as mongoose from "mongoose";
 import Thread from "./Thread";
 
 export type UserModel = mongoose.Document & {
-  email: string,
-  password: string,
+  email: { type: String, required: true },
+  password: { type: String, required: true },
   passwordResetToken: string,
   passwordResetExpires: Date,
 
