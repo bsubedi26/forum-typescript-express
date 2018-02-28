@@ -38,10 +38,29 @@ block content
                 h5= thread.title
                 span Creator: 
                 span= thread.creatorId.email
-            div.card-content
+            div.card-content.mt-2.text-center.mx-auto.w-75
               a.link-text(href=`/thread/${thread._id}`)
                 p= thread.summary
               if user
                 if user._id.toString() == thread.creatorId._id.toString()
-                  button.btn.btn-outline-secondary.pointer.m-2 Edit
-                  button.btn.btn-outline-danger.pointer.m-2 Delete
+                  div.row.justify-content-center
+                    button.btn.btn-outline-secondary.pointer.m-2(data-toggle="collapse" data-target="#editForm") Edit
+                    form(action=`/thread/remove/${thread._id}` method='POST')
+                      button.btn.btn-outline-danger.pointer.m-2 Delete
+
+                    //- EDIT FORM
+                    div.collapse.navbar-collapse#editForm
+                      div.mx-auto.w-50
+                        form(action=`/thread/edit/${thread._id}` method='POST')
+                          input(type='hidden', name='_csrf', value=_csrf)
+                          .form-group
+                            label(class='control-label', for='title') Title
+                            input.form-control(type='text', name='title', id='title', autofocus=true)
+                          .form-group
+                            label(class='control-label', for='summary') Summary
+                            textarea.form-control(name='summary', id='summary', rows='4')
+                          .form-group
+                            button.btn.btn-outline-success.w-25(type='submit')
+                              i.fa.fa-envelope
+                              | Submit
+

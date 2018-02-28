@@ -20,7 +20,7 @@ import { range, isEmpty } from "lodash";
 // }
 
 export let get = async (req: Request, res: Response) => {
-  console.log('req.query: ', req.query);
+  // console.log('req.query: ', req.query);
   if (isEmpty(req.query)) return redirectToSingleTopic(req, res);
   req.query._id ? getOne(req, res) : getByTopicId(req, res);
 };
@@ -44,7 +44,6 @@ export let getByTopicId = async (req: Request, res: Response) => {
     .populate({ path: 'topicId', select: 'name' })
     .populate({ path: 'creatorId', select: 'email' });
 
-  console.log(threads[0]);
   const topic = {
     name: threads[0].topicId.name,
     _id: topicId,
@@ -117,4 +116,31 @@ export let postCreate = async (req: Request, res: Response, next: NextFunction) 
   }
 };
 
+export let remove = async (req: Request, res: Response, next: NextFunction) => {
+  const { _id } = req.params;
+  try {
+    const doc = await Thread.findByIdAndRemove(_id);
+    req.flash("success", {
+      msg: "Successfully removed thread!"
+    });
+    return res.redirect("/thread");
+  }
+  catch (err) {
+    next(err);
+  }
+};
 
+export let edit = async (req: Request, res: Response, next: NextFunction) => {
+  const { _id } = req.params;
+
+  try {
+    const doc = await Thread.findByIdAndUpdate(_id, req.body);
+    req.flash("success", {
+      msg: "Successfully updated thread!"
+    });
+    return res.redirect("/thread");
+  }
+  catch (err) {
+    next(err);
+  }
+};

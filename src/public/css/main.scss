@@ -1,6 +1,6 @@
 @import "lib/bootstrap4/bootstrap";
-@import "base/button-social";
 @import "lib/font-awesome/font-awesome";
+@import "base/button-social";
 
 // Scaffolding
 // -------------------------
@@ -90,4 +90,22 @@ textarea {
 
 .fa {
   margin-right: 6px;
+}
+
+
+// HOME
+// -------------------------
+.home {
+  .header {
+  background-color: #d8e5f0;
+
+  }
+  .title {
+    font-size: 2.827em;
+  }
+  .desc {
+    color: rgba(0, 0, 0, 0.5);
+    font-weight: 500;
+    font-size: 1.2em;
+  }
 }
